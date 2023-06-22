@@ -5,6 +5,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
@@ -21,11 +23,21 @@ public class Sbproject2Application {
         return args -> {
             extracted(studentRepository);
 
-            Sort sort = Sort.by("firstName").ascending().and(Sort.by("age").descending());
-
-            studentRepository.findAll(sort).forEach(student -> System.out.println(student.getFirstName() + " " + student.getAge()));
+            PageRequest pageRequest = PageRequest.of(0,5,Sort.by("firstName").ascending());
+            Page<Student> page = studentRepository.findAll(pageRequest);
+            System.out.println("Total page: " + page.getTotalPages() + ", elements per page: " + page.getSize() + ", total elements: " + page.getTotalElements());
+            System.out.println(page);
+            System.out.println(page.getContent());
 
         };
+    }
+
+    private static void generatingStudentsByNameAscAgeDesc(StudentRepository studentRepository) {
+        extracted(studentRepository);
+
+        Sort sort = Sort.by("firstName").ascending().and(Sort.by("age").descending());
+
+        studentRepository.findAll(sort).forEach(student -> System.out.println(student.getFirstName() + " " + student.getAge()));
     }
 
     private static void extracted(StudentRepository studentRepository) {
