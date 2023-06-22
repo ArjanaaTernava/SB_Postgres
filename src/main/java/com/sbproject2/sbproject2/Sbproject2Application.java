@@ -39,6 +39,9 @@ public class Sbproject2Application {
             studentRepository.findStudentsByFirstNameEqualsAndAgeGreaterThan("John",21).forEach(System.out::println);
 
             studentRepository.findStudentsByFirstNameEqualsAndAgeEqualsNative("John",21).forEach(System.out::println);
+            System.out.println("deleting student by id");
+            studentRepository.deleteStudentById(1L);
+
 //            System.out.println("checking the amount of students in the db");
 //            System.out.println("we have "+ studentRepository.count() + " students in the db");
 //
