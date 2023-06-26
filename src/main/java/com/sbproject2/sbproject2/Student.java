@@ -68,8 +68,8 @@ public class Student {
     @OneToMany(
             mappedBy = "student",
             orphanRemoval = true,
-            cascade = {CascadeType.PERSIST,CascadeType.REMOVE}
-
+            cascade = {CascadeType.PERSIST,CascadeType.REMOVE},
+            fetch = FetchType.EAGER
     )
     private List<Book>books = new ArrayList<>();
 

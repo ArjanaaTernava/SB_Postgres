@@ -53,7 +53,7 @@ public class Sbproject2Application {
 
             studentRepository.findById(1L).ifPresent(s-> {
                 System.out.println("fetching books lazy..");
-                List<Book> books = student.getBooks();
+                List<Book> books = s.getBooks();
                 books.forEach(book ->
                 {
                     System.out.println(s.getFirstName() + " borrowed " + book.getBookName());
