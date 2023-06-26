@@ -9,7 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
-import java.util.List;
+import java.util.Optional;
 
 @SpringBootApplication
 public class Sbproject2Application {
@@ -18,16 +18,38 @@ public class Sbproject2Application {
         SpringApplication.run(Sbproject2Application.class, args);
     }
 
-    @Bean
-    CommandLineRunner commandLineRunner(StudentRepository studentRepository){
-        return args -> {
-            extracted(studentRepository);
+//    @Bean
+//    CommandLineRunner commandLineRunner(StudentRepository studentRepository){
+//        return args -> {
+//            extracted(studentRepository);
+//
+//            PageRequest pageRequest = PageRequest.of(0,5,Sort.by("firstName").ascending());
+//            Page<Student> page = studentRepository.findAll(pageRequest);
+//            System.out.println("Total page: " + page.getTotalPages() + ", elements per page: " + page.getSize() + ", total elements: " + page.getTotalElements());
+//            System.out.println(page);
+//            System.out.println(page.getContent());
+//
+//        };
+//    }
 
-            PageRequest pageRequest = PageRequest.of(0,5,Sort.by("firstName").ascending());
-            Page<Student> page = studentRepository.findAll(pageRequest);
-            System.out.println("Total page: " + page.getTotalPages() + ", elements per page: " + page.getSize() + ", total elements: " + page.getTotalElements());
-            System.out.println(page);
-            System.out.println(page.getContent());
+        @Bean
+    CommandLineRunner commandLineRunner(StudentRepository studentRepository, StudentIdentityCardRepository StudentIdentityCardRepository){
+        return args -> {
+            Faker faker = new Faker();
+
+            String firstName = faker.name().firstName();
+            String lastName = faker.name().lastName();
+            String email = String.format("%s.%s@cdp.com",firstName,lastName);
+            int age = faker.number().numberBetween(18,50);
+            Student student = new Student(firstName,lastName,email,age);
+
+            StudentIdentityCard studentIdentityCard1 = new StudentIdentityCard("123456789",student);
+            StudentIdentityCardRepository.save(studentIdentityCard1);
+            StudentIdentityCardRepository.findById(1L).ifPresent(System.out::println);
+
+            Optional<Student> optionalStudent = studentRepository.findById(1L);
+            System.out.println(optionalStudent + ", and has a student identity card:" + optionalStudent.get().getStudentIdentityCard().getCardNumber());
+
 
         };
     }

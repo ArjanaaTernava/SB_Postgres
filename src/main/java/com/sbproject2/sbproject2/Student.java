@@ -23,7 +23,7 @@ public class Student {
             allocationSize = 1
     )
     @GeneratedValue(
-            strategy =SEQUENCE,
+            strategy = SEQUENCE,
             generator = "student_sequence"
 
     )
@@ -56,11 +56,24 @@ public class Student {
     )
     private Integer age;
 
+    @OneToOne(
+            mappedBy = "student"
+    )
+    private StudentIdentityCard studentIdentityCard;
+
     public Student(String firstName, String lastName, String email, Integer age) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.age = age;
+    }
+
+    public StudentIdentityCard getStudentIdentityCard() {
+        return studentIdentityCard;
+    }
+
+    public void setStudentIdentityCard(StudentIdentityCard studentIdentityCard) {
+        this.studentIdentityCard = studentIdentityCard;
     }
 
     public Student() {
@@ -119,3 +132,5 @@ public class Student {
                 '}';
     }
 }
+
+
