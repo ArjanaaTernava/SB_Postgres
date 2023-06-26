@@ -2,6 +2,9 @@ package com.sbproject2.sbproject2;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Entity(name="Student")
@@ -57,9 +60,18 @@ public class Student {
     private Integer age;
 
     @OneToOne(
-            mappedBy = "student"
+            mappedBy = "student",
+            orphanRemoval = true
     )
     private StudentIdentityCard studentIdentityCard;
+
+    @OneToMany(
+            mappedBy = "student",
+            orphanRemoval = true,
+            cascade = {CascadeType.PERSIST,CascadeType.REMOVE}
+
+    )
+    private List<Book>books = new ArrayList<>();
 
     public Student(String firstName, String lastName, String email, Integer age) {
         this.firstName = firstName;
@@ -80,6 +92,23 @@ public class Student {
 
     }
 
+    public List<Book>getBooks(){
+        return books;
+    }
+
+    public void addBook(Book book){
+        if(!this.books.contains(book)){
+            this.books.add(book);
+            book.setStudent(this);
+        }
+    }
+
+    public void removeBook(Book book){
+        if(!this.books.contains(book)){
+            this.books.remove(book);
+            book.setStudent(null);
+        }
+    }
 
     public Long getId() {
         return id;

@@ -5,11 +5,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import java.time.LocalDateTime;
+import java.util.List;
 
-import java.util.Optional;
 
 @SpringBootApplication
 public class Sbproject2Application {
@@ -43,12 +42,29 @@ public class Sbproject2Application {
             int age = faker.number().numberBetween(18,50);
             Student student = new Student(firstName,lastName,email,age);
 
+            student.addBook(new Book(LocalDateTime.now().minusDays(4), "The Alchemist"));
+            student.addBook(new Book(LocalDateTime.now().minusDays(4), "The Dodo"));
+            student.addBook(new Book(LocalDateTime.now().minusYears(1), "The Machine"));
+
+
             StudentIdentityCard studentIdentityCard1 = new StudentIdentityCard("123456789",student);
             StudentIdentityCardRepository.save(studentIdentityCard1);
-            StudentIdentityCardRepository.findById(1L).ifPresent(System.out::println);
 
-            Optional<Student> optionalStudent = studentRepository.findById(1L);
-            System.out.println(optionalStudent + ", and has a student identity card:" + optionalStudent.get().getStudentIdentityCard().getCardNumber());
+
+            studentRepository.findById(1L).ifPresent(s-> {
+                System.out.println("fetching books lazy..");
+                List<Book> books = student.getBooks();
+                books.forEach(book ->
+                {
+                    System.out.println(s.getFirstName() + " borrowed " + book.getBookName());
+                });
+            });
+//            StudentIdentityCardRepository.findById(1L).ifPresent(System.out::println);
+//
+//            Optional<Student> optionalStudent = studentRepository.findById(1L);
+//            System.out.println(optionalStudent + ", and has a student identity card:" + optionalStudent.get().getStudentIdentityCard().getCardNumber());
+
+            //studentRepository.deleteById(1L); //Nuk fshihet se jena tu try me fshi prej child
 
 
         };
