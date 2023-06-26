@@ -32,7 +32,7 @@ public class Sbproject2Application {
 //    }
 
         @Bean
-    CommandLineRunner commandLineRunner(StudentRepository studentRepository, StudentIdentityCardRepository StudentIdentityCardRepository){
+    CommandLineRunner commandLineRunner(StudentRepository studentRepository){
         return args -> {
             Faker faker = new Faker();
 
@@ -48,17 +48,18 @@ public class Sbproject2Application {
 
 
             StudentIdentityCard studentIdentityCard1 = new StudentIdentityCard("123456789",student);
-            StudentIdentityCardRepository.save(studentIdentityCard1);
+            student.setStudentIdentityCard(studentIdentityCard1);
+            studentRepository.save(student);
 
-
-            studentRepository.findById(1L).ifPresent(s-> {
-                System.out.println("fetching books lazy..");
-                List<Book> books = s.getBooks();
-                books.forEach(book ->
-                {
-                    System.out.println(s.getFirstName() + " borrowed " + book.getBookName());
-                });
-            });
+//
+//            studentRepository.findById(1L).ifPresent(s-> {
+//                System.out.println("fetching books lazy..");
+//                List<Book> books = s.getBooks();
+//                books.forEach(book ->
+//                {
+//                    System.out.println(s.getFirstName() + " borrowed " + book.getBookName());
+//                });
+//            });
 //            StudentIdentityCardRepository.findById(1L).ifPresent(System.out::println);
 //
 //            Optional<Student> optionalStudent = studentRepository.findById(1L);
