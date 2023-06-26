@@ -49,6 +49,10 @@ public class Sbproject2Application {
 
             StudentIdentityCard studentIdentityCard1 = new StudentIdentityCard("123456789",student);
             student.setStudentIdentityCard(studentIdentityCard1);
+
+            student.addEnrollment(new Enrollment(new EnrollmentId(1L,1L),student,new Course("Computer Science","IT"),LocalDateTime.now()));
+            student.addEnrollment(new Enrollment(new EnrollmentId(1L,2L),student,new Course("Operating Systems","IT"),LocalDateTime.now().minusDays(18)));
+            student.addEnrollment(new Enrollment(new EnrollmentId(1L,2L),student,new Course("Software Design","IT"),LocalDateTime.now().minusDays(18)));
             studentRepository.save(student);
 
 //
